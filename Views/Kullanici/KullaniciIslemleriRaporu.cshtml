@@ -1,0 +1,191 @@
+@model List<OgrenciBilgiSistemi.Services.KullaniciIslemRaporu>
+
+@{
+    ViewData["Title"] = "Kullanıcı İşlemleri Raporu";
+    Layout = "_Layout";
+}
+
+<h1 class="page-title">
+    <i class="fas fa-chart-line mr-2"></i>Kullanıcı İşlemleri Raporu
+</h1>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Tarih Filtresi</h5>
+    </div>
+    <div class="card-body">
+        <form method="get" class="form-inline">
+            <div class="form-group mr-3">
+                <label for="baslangic" class="mr-2">Başlangıç Tarihi:</label>
+                <input type="date" id="baslangic" name="baslangic" class="form-control" value="@ViewBag.Baslangic.ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="form-group mr-3">
+                <label for="bitis" class="mr-2">Bitiş Tarihi:</label>
+                <input type="date" id="bitis" name="bitis" class="form-control" value="@ViewBag.Bitis.ToString("yyyy-MM-dd")" />
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-filter mr-1"></i>Filtrele
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-table mr-1"></i>İşlem Detayları
+                </h5>
+            </div>
+            <div class="card-body">
+                @if (Model != null && Model.Count > 0)
+                {
+                    <canvas id="islemRaporuChart" width="400" height="200"></canvas>
+
+                    <table class="table table-striped table-hover mt-4">
+                        <thead>
+                            <tr>
+                                <th>Kullanıcı</th>
+                                <th>İşlem Türü</th>
+                                <th class="text-center">İşlem Sayısı</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderByDescending(x => x.IslemSayisi))
+                            {
+                                <tr class="islem-data" data-kullanici="@item.KullaniciAdi" data-islem="@item.IslemTuru" data-sayi="@item.IslemSayisi">
+                                    <td>@item.KullaniciAdi</td>
+                                    <td>@item.IslemTuru</td>
+                                    <td class="text-center">@item.IslemSayisi</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-light font-weight-bold">
+                                <td colspan="2">Toplam</td>
+                                <td class="text-center">@Model.Sum(x => x.IslemSayisi)</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle mr-2"></i>Seçilen tarih aralığında işlem kaydı bulunamadı.
+                    </div>
+                }
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-info" onclick="window.print()">
+                    <i class="fas fa-print mr-1"></i>Yazdır
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left mr-1"></i>Raporlara Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle mr-1"></i>Bilgilendirme
+                </h5>
+            </div>
+            <div class="card-body">
+                <p>
+                    Bu rapor, kullanıcıların yaptığı işlemleri göstermektedir.
+                </p>
+                <p>
+                    Tarih aralığını değiştirerek farklı dönemlerdeki işlemleri görüntüleyebilirsiniz.
+                </p>
+                <p>
+                    Raporu yazdırmak için "Yazdır" düğmesini kullanabilirsiniz.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // İşlem raporu grafiği
+            var islemRaporuCtx = document.getElementById('islemRaporuChart');
+            if (islemRaporuCtx) {
+                var kullanicilar = [];
+                var islemTurleri = [];
+                var islemSayilari = [];
+
+                // Benzersiz kullanıcı ve işlem türlerini al
+                $('.islem-data').each(function() {
+                    var kullanici = $(this).data('kullanici');
+                    var islemTuru = $(this).data('islem');
+                    
+                    if (kullanicilar.indexOf(kullanici) === -1) {
+                        kullanicilar.push(kullanici);
+                    }
+                    
+                    if (islemTurleri.indexOf(islemTuru) === -1) {
+                        islemTurleri.push(islemTuru);
+                    }
+                });
+                
+                // Her kullanıcı için işlem sayılarını hesapla
+                var datasets = [];
+                var renkler = ['rgba(54, 162, 235, 0.7)', 'rgba(255, 99, 132, 0.7)', 'rgba(75, 192, 192, 0.7)', 
+                              'rgba(255, 159, 64, 0.7)', 'rgba(153, 102, 255, 0.7)', 'rgba(255, 205, 86, 0.7)'];
+                
+                kullanicilar.forEach(function(kullanici, index) {
+                    var data = [];
+                    
+                    islemTurleri.forEach(function(islemTuru) {
+                        var found = false;
+                        
+                        $('.islem-data').each(function() {
+                            if ($(this).data('kullanici') === kullanici && $(this).data('islem') === islemTuru) {
+                                data.push($(this).data('sayi'));
+                                found = true;
+                                return false;
+                            }
+                        });
+                        
+                        if (!found) {
+                            data.push(0);
+                        }
+                    });
+                    
+                    var color = renkler[index % renkler.length];
+                    
+                    datasets.push({
+                        label: kullanici,
+                        data: data,
+                        backgroundColor: color,
+                        borderColor: color.replace('0.7', '1'),
+                        borderWidth: 1
+                    });
+                });
+
+                new Chart(islemRaporuCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: islemTurleri,
+                        datasets: datasets
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                precision: 0
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+} 

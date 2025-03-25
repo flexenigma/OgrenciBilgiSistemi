@@ -1,0 +1,48 @@
+@model OgrenciBilgiSistemi.Models.Ogrenci
+
+@{
+    ViewData["Title"] = "Öðrenci Sil";
+}
+
+<h1 class="page-title text-danger">
+    <i class="fas fa-user-times mr-2"></i>Öðrenci Sil
+</h1>
+
+<div class="alert alert-danger">
+    <i class="fas fa-exclamation-triangle mr-2"></i>
+    <strong>Uyarý:</strong> Bu öðrenciyi silmek istediðinizden emin misiniz? Bu iþlem geri alýnamaz.
+</div>
+
+<div class="card">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0">
+            <i class="fas fa-user-graduate mr-1"></i>Öðrenci Bilgileri
+        </h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.OgrenciNo)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.OgrenciNo)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.AdSoyad)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.AdSoyad)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Bolum)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Bolum)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.GirisTarihi)</dt>
+            <dd class="col-sm-9">@Model.GirisTarihi.ToString("dd.MM.yyyy")</dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="OgrenciId" />
+            <button type="submit" class="btn btn-danger delete-confirm" onclick="return confirm('Bu öðrenciyi silmek istediðinizden emin misiniz?')">
+                <i class="fas fa-trash-alt mr-1"></i>Öðrenciyi Sil
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left mr-1"></i>Listeye Dön
+            </a>
+        </form>
+    </div>
+</div>

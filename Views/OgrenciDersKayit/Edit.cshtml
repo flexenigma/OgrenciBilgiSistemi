@@ -1,0 +1,58 @@
+@model OgrenciBilgiSistemi.Models.OgrenciDersKayit
+
+@{
+    ViewData["Title"] = "Ders Kaydı Düzenle";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h5 class="mb-0">Ders Kaydı Düzenle</h5>
+            <a asp-action="Index" class="btn btn-sm btn-secondary">Listeye Dön</a>
+        </div>
+
+        <div class="alert alert-info mb-4">
+            <strong>Öğrenci:</strong> @ViewBag.OgrenciAdSoyad<br />
+            <strong>Ders:</strong> @ViewBag.DersAdi
+        </div>
+
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="KayitId" />
+            <input type="hidden" asp-for="OgrenciId" />
+            <input type="hidden" asp-for="DersId" />
+            <input type="hidden" asp-for="KayitTarihi" />
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="Donem" class="control-label"></label>
+                        <select asp-for="Donem" class="form-select">
+                            <option value="2024-2025 Güz">2024-2025 Güz</option>
+                            <option value="2024-2025 Bahar">2024-2025 Bahar</option>
+                            <option value="2025-2026 Güz">2025-2026 Güz</option>
+                            <option value="2025-2026 Bahar">2025-2026 Bahar</option>
+                        </select>
+                        <span asp-validation-for="Donem" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="Not" class="control-label"></label>
+                        <input asp-for="Not" class="form-control" min="0" max="100" />
+                        <span asp-validation-for="Not" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group mb-3">
+                <input type="submit" value="Kaydet" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">İptal</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

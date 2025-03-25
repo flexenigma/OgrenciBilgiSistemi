@@ -1,0 +1,64 @@
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Öðrenci Bilgi Sistemi</h1>
+    <p class="lead">Eðitim yönetimi sisteminize hoþ geldiniz.</p>
+</div>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="stats-card">
+                <h3>Öðrenciler</h3>
+                <p class="number">@ViewBag.OgrenciSayisi</p>
+                <p>Toplam kayýtlý öðrenci</p>
+                <a asp-controller="Ogrenci" asp-action="Index" class="btn btn-sm btn-primary mt-2">
+                    <i class="fas fa-list mr-1"></i> Listele
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card success">
+                <h3>Dersler</h3>
+                <p class="number success">@ViewBag.DersSayisi</p>
+                <p>Toplam aktif ders</p>
+                <a asp-controller="Ders" asp-action="Index" class="btn btn-sm btn-success mt-2">
+                    <i class="fas fa-list mr-1"></i> Listele
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card warning">
+                <h3>Kayýtlar</h3>
+                <p class="number warning">@ViewBag.KayitSayisi</p>
+                <p>Toplam ders kaydý</p>
+                <a asp-controller="Rapor" asp-action="DersKayitRaporu" class="btn btn-sm btn-warning mt-2 text-white">
+                    <i class="fas fa-chart-bar mr-1"></i> Rapor
+                </a>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-sign-in-alt mr-2"></i>Giriþ Yapýn</h4>
+                </div>
+                <div class="card-body">
+                    <p class="lead text-center">Sistemi kullanmak için lütfen giriþ yapýn.</p>
+                    <div class="text-center mt-4">
+                        <a asp-controller="Kullanici" asp-action="Login" class="btn btn-primary btn-lg">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Giriþ Yap
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

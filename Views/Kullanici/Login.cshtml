@@ -1,0 +1,71 @@
+@model OgrenciBilgiSistemi.Models.Kullanici
+
+@{
+    ViewData["Title"] = "Giriş";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="login-container">
+    <div class="card login-card">
+        <div class="card-header">
+            <h3><i class="fas fa-sign-in-alt mr-2"></i>Sisteme Giriş</h3>
+        </div>
+        <div class="card-body">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    <h5><i class="fas fa-exclamation-triangle"></i> Giriş Hatası:</h5>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                </div>
+            }
+            
+            <form asp-action="Login" method="post">
+                <div class="form-group">
+                    <label for="kullaniciAdi">Kullanıcı Adı</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input type="text" id="kullaniciAdi" name="kullaniciAdi" class="form-control" value="admin" required />
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sifre">Şifre</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        </div>
+                        <input type="password" id="sifre" name="sifre" class="form-control" value="Ss123123" required />
+                    </div>
+                </div>
+                
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-sign-in-alt me-2"></i>Giriş Yap
+                    </button>
+                </div>
+            </form>
+            
+            <hr />
+            <div class="alert alert-info">
+                <p><strong>Güvenli giriş:</strong></p>
+                <ul>
+                    <li>Kullanıcı adı: <code>admin</code></li>
+                    <li>Şifre: <code>Ss123123</code></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Otomatik form gönderimi - sayfa yüklenince admin olarak giriş yap
+            // setTimeout(function() {
+            //    $('form').submit();
+            // }, 500);
+        });
+    </script>
+}

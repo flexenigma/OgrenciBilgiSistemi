@@ -1,0 +1,136 @@
+@model Dictionary<string, int>
+
+@{
+    ViewData["Title"] = "Bölüm Öğrenci Raporu";
+    Layout = "_Layout";
+}
+
+<h1 class="page-title">
+    <i class="fas fa-users mr-2"></i>Bölüm Öğrenci Raporu
+</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-bar mr-1"></i>Bölümlere Göre Öğrenci Sayıları
+                </h5>
+            </div>
+            <div class="card-body">
+                @if (Model != null && Model.Count > 0)
+                {
+                    <canvas id="bolumRaporuChart" width="400" height="200"></canvas>
+
+                    <table class="table table-striped table-hover mt-4">
+                        <thead>
+                            <tr>
+                                <th>Bölüm</th>
+                                <th class="text-center">Öğrenci Sayısı</th>
+                                <th class="text-center">Oran (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var toplam = Model.Sum(x => x.Value);
+                            }
+                            @foreach (var item in Model.OrderByDescending(x => x.Value))
+                            {
+                                var oran = toplam > 0 ? Math.Round((double)item.Value / toplam * 100, 2) : 0;
+                                <tr class="bolum-data" data-bolum="@item.Key" data-sayi="@item.Value">
+                                    <td>@item.Key</td>
+                                    <td class="text-center">@item.Value</td>
+                                    <td class="text-center">%@oran.ToString("0.00")</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-light font-weight-bold">
+                                <td>Toplam</td>
+                                <td class="text-center">@toplam</td>
+                                <td class="text-center">%100</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle mr-2"></i>Rapor için veri bulunamadı.
+                    </div>
+                }
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-info" onclick="window.print()">
+                    <i class="fas fa-print mr-1"></i>Yazdır
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left mr-1"></i>Raporlara Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle mr-1"></i>Bilgilendirme
+                </h5>
+            </div>
+            <div class="card-body">
+                <p>
+                    Bu rapor, öğrencilerin bölümlere göre dağılımını göstermektedir.
+                </p>
+                <p>
+                    Yalnızca aktif öğrenciler dikkate alınmıştır.
+                </p>
+                <p>
+                    Raporu yazdırmak için "Yazdır" düğmesini kullanabilirsiniz.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Bölüm raporu grafiği
+            var bolumRaporuCtx = document.getElementById('bolumRaporuChart');
+            if (bolumRaporuCtx) {
+                var labels = [];
+                var data = [];
+
+                $('.bolum-data').each(function() {
+                    labels.push($(this).data('bolum'));
+                    data.push($(this).data('sayi'));
+                });
+
+                new Chart(bolumRaporuCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Öğrenci Sayısı',
+                            data: data,
+                            backgroundColor: 'rgba(33, 133, 208, 0.7)',
+                            borderColor: 'rgba(33, 133, 208, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                precision: 0
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+}

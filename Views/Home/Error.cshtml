@@ -1,0 +1,40 @@
+﻿@model OgrenciBilgiSistemi.Models.ErrorViewModel
+@{
+    ViewData["Title"] = "Hata";
+}
+
+<h1 class="text-danger">Hata</h1>
+<h2 class="text-danger">İsteğiniz işlenirken bir hata oluştu.</h2>
+
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>İstek ID:</strong> <code>@Model.RequestId</code>
+    </p>
+}
+
+<div class="card mt-4">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0">
+            <i class="fas fa-exclamation-triangle mr-1"></i>Hata Detayı
+        </h5>
+    </div>
+    <div class="card-body">
+        <p>
+            Bu hatanın nedeni şunlardan biri olabilir:
+        </p>
+        <ul>
+            <li>Geçersiz bir URL adresi veya sayfa talebinde bulundunuz.</li>
+            <li>Yetkiniz olmayan bir sayfaya erişmeye çalıştınız.</li>
+            <li>Sistem içinde beklenmeyen bir hata oluştu.</li>
+        </ul>
+        <p>
+            Lütfen tarayıcınızın adres çubuğundaki URL'yi kontrol edin ve tekrar deneyin.
+        </p>
+    </div>
+    <div class="card-footer">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
+            <i class="fas fa-home mr-1"></i>Ana Sayfaya Dön
+        </a>
+    </div>
+</div>

@@ -1,0 +1,85 @@
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<div class="container text-center mt-5">
+    <div class="jumbotron bg-light p-5 shadow-sm rounded">
+        <h1 class="display-4">@ViewBag.Message</h1>
+        <p class="lead">@ViewBag.Subtitle</p>
+        <hr class="my-4">
+        
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">
+                <p><i class="fas fa-exclamation-triangle mr-2"></i> @ViewBag.Error</p>
+            </div>
+        }
+        else
+        {
+            <p>Öğrenci ve ders kayıtlarınızı yönetmek için sisteme giriş yapabilirsiniz.</p>
+        }
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="m-0">Öğrenciler</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.OgrenciSayisi != null)
+                    {
+                        <h2 class="display-4">@ViewBag.OgrenciSayisi</h2>
+                        <p class="card-text">Toplam kayıtlı öğrenci</p>
+                    }
+                    else
+                    {
+                        <p class="card-text">Öğrenci kayıtları ve bilgileri</p>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="m-0">Dersler</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.DersSayisi != null)
+                    {
+                        <h2 class="display-4">@ViewBag.DersSayisi</h2>
+                        <p class="card-text">Toplam aktif ders</p>
+                    }
+                    else
+                    {
+                        <p class="card-text">Ders kayıtları ve bilgileri</p>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="m-0">Kayıtlar</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.KayitSayisi != null)
+                    {
+                        <h2 class="display-4">@ViewBag.KayitSayisi</h2>
+                        <p class="card-text">Toplam kayıt sayısı</p>
+                    }
+                    else
+                    {
+                        <p class="card-text">Sistem kayıtları ve istatistikler</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="/Kullanici/Login" class="btn btn-primary btn-lg">
+            <i class="fas fa-sign-in-alt mr-2"></i> Giriş Yap
+        </a>
+    </div>
+</div>

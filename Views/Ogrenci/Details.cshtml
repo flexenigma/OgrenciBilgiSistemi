@@ -1,0 +1,118 @@
+@model OgrenciBilgiSistemi.Models.Ogrenci
+
+@{
+    ViewData["Title"] = "Öðrenci Detayý";
+}
+
+<h1 class="page-title">
+    <i class="fas fa-user-graduate mr-2"></i>Öðrenci Detaylarý
+</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-id-card mr-1"></i>Temel Bilgiler
+                </h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.OgrenciNo)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.OgrenciNo)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.AdSoyad)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.AdSoyad)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Bolum)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Bolum)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.GirisTarihi)</dt>
+                    <dd class="col-sm-8">@Model.GirisTarihi.ToString("dd.MM.yyyy")</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Telefon)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Telefon)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Email)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Email)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.AktifMi)</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.AktifMi)
+                        {
+                        <span class="badge badge-success">Aktif</span>
+                        }
+                        else
+                        {
+                        <span class="badge badge-danger">Pasif</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group">
+                    <a asp-action="Edit" asp-route-id="@Model.OgrenciId" class="btn btn-primary">
+                        <i class="fas fa-edit mr-1"></i>Düzenle
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-1"></i>Listeye Dön
+                    </a>
+                    <button class="btn btn-info" onclick="window.print()">
+                        <i class="fas fa-print mr-1"></i>Yazdýr
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-book mr-1"></i>Aldýðý Dersler
+                </h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Kayitlar != null && Model.Kayitlar.Any())
+                {
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>Ders Kodu</th>
+                            <th>Ders Adý</th>
+                            <th>Dönem</th>
+                            <th>Not</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var kayit in Model.Kayitlar)
+                            {
+                        <tr>
+                            <td>@kayit.Ders.DersKodu</td>
+                            <td>@kayit.Ders.DersAdi</td>
+                            <td>@kayit.Donem</td>
+                            <td>
+                                @if (kayit.NotDurumu.HasValue)
+                                        {
+                                @kayit.NotDurumu.Value
+                                        }
+                                        else
+                                        {
+                                <span class="text-muted">Girilmedi</span>
+                                        }
+                            </td>
+                        </tr>
+                            }
+                    </tbody>
+                </table>
+                }
+                else
+                {
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle mr-2"></i>Öðrencinin kayýtlý dersi bulunmamaktadýr.
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

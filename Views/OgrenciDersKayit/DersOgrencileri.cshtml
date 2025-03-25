@@ -1,0 +1,100 @@
+@model IEnumerable<OgrenciBilgiSistemi.Models.OgrenciDersKayit>
+
+@{
+    ViewData["Title"] = "Ders Öğrencileri";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h5 class="mb-0">@ViewBag.Ders.DersAdi - Ders Öğrencileri</h5>
+            <div>
+                <a asp-controller="Ders" asp-action="Details" asp-route-id="@ViewBag.Ders.DersId" class="btn btn-sm btn-info">Ders Detayı</a>
+                <a asp-action="Index" class="btn btn-sm btn-secondary">Ders Kayıtları</a>
+            </div>
+        </div>
+
+        <div class="alert alert-info mb-4">
+            <p><strong>Ders Kodu:</strong> @ViewBag.Ders.DersKodu</p>
+            <p><strong>Kredi:</strong> @ViewBag.Ders.Kredi</p>
+            <p><strong>Kayıtlı Öğrenci Sayısı:</strong> @Model.Count()</p>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Ogrenci.OgrenciNo)</th>
+                            <th>@Html.DisplayNameFor(model => model.Ogrenci.AdSoyad)</th>
+                            <th>@Html.DisplayNameFor(model => model.Ogrenci.Bolum)</th>
+                            <th>@Html.DisplayNameFor(model => model.Donem)</th>
+                            <th>@Html.DisplayNameFor(model => model.Not)</th>
+                            <th>@Html.DisplayNameFor(model => model.KayitTarihi)</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.Ogrenci.OgrenciNo)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Ogrenci.AdSoyad)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Ogrenci.Bolum)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Donem)</td>
+                                <td>
+                                    @if (item.Not.HasValue)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Not)
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Henüz not verilmedi</span>
+                                    }
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.KayitTarihi)</td>
+                                <td>
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Ogretmen"))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.KayitId" class="btn btn-sm btn-info">Not Gir</a>
+                                    }
+                                    <a asp-controller="Ogrenci" asp-action="Details" asp-route-id="@item.OgrenciId" class="btn btn-sm btn-secondary">Öğrenci Detayı</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                Bu derse henüz kayıtlı öğrenci bulunmamaktadır.
+            </div>
+            
+            @if (User.IsInRole("Admin") || User.IsInRole("Ogretmen"))
+            {
+                <div class="mt-3">
+                    <a asp-action="Create" class="btn btn-primary">Yeni Öğrenci Ekle</a>
+                </div>
+            }
+        }
+    </div>
+</div> 

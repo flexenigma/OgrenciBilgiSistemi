@@ -1,0 +1,53 @@
+@model OgrenciBilgiSistemi.Models.Ders
+
+@{
+    ViewData["Title"] = "Ders Sil";
+}
+
+<h1 class="page-title text-danger">
+    <i class="fas fa-trash-alt mr-2"></i>Ders Sil
+</h1>
+
+<div class="alert alert-danger">
+    <i class="fas fa-exclamation-triangle mr-2"></i>
+    <strong>Uyarý:</strong> Bu dersi silmek istediðinizden emin misiniz? Bu iþlem geri alýnamaz.
+</div>
+
+<div class="card">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0">
+            <i class="fas fa-book mr-1"></i>Ders Bilgileri
+        </h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.DersKodu)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.DersKodu)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.DersAdi)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.DersAdi)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Kredi)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Kredi)</dd>
+        </dl>
+
+        @if (Model.Kayitlar != null && Model.Kayitlar.Any())
+        {
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <strong>Dikkat:</strong> Bu derse kayýtlý @Model.Kayitlar.Count öðrenci bulunmaktadýr.
+        </div>
+        }
+    </div>
+    <div class="card-footer">
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="DersId" />
+            <button type="submit" class="btn btn-danger delete-confirm" onclick="return confirm('Bu dersi silmek istediðinizden emin misiniz?')">
+                <i class="fas fa-trash-alt mr-1"></i>Dersi Sil
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left mr-1"></i>Listeye Dön
+            </a>
+        </form>
+    </div>
+</div>

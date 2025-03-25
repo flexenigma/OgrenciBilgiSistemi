@@ -1,0 +1,50 @@
+@model OgrenciBilgiSistemi.Models.Kullanici
+
+@{
+    ViewData["Title"] = "Kullanıcı Sil";
+}
+
+<h1 class="page-title">
+    <i class="fas fa-user-times mr-2"></i>Kullanıcı Sil
+</h1>
+
+<div class="card">
+    <div class="card-body">
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            <strong>Dikkat!</strong> Bu kullanıcıyı silmek istediğinize emin misiniz?
+        </div>
+
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.KullaniciAdi)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.KullaniciAdi)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Email)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Email)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.AdSoyad)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.AdSoyad)</dd>
+
+            <dt class="col-sm-3">Kullanıcı Rolü</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Rol.RolAdi)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.AktifMi)</dt>
+            <dd class="col-sm-9">@(Model.AktifMi ? "Evet" : "Hayır")</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.KayitTarihi)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.KayitTarihi)</dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="KullaniciId" />
+            <div class="form-group">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash mr-1"></i>Sil
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left mr-1"></i>Listeye Dön
+                </a>
+            </div>
+        </form>
+    </div>
+</div> 

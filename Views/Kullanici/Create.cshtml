@@ -1,0 +1,127 @@
+@model OgrenciBilgiSistemi.Models.Kullanici
+
+@{
+    ViewData["Title"] = "Kullanýcý Ekle";
+    var roller = ViewBag.Roller as SelectList;
+}
+
+<h1 class="page-title">
+    <i class="fas fa-user-plus mr-2"></i>Yeni Kullanýcý Ekle
+</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label asp-for="KullaniciAdi" class="control-label"></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input asp-for="KullaniciAdi" class="form-control" />
+                        </div>
+                        <span asp-validation-for="KullaniciAdi" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Sifre" class="control-label"></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            </div>
+                            <input asp-for="Sifre" class="form-control" />
+                        </div>
+                        <span asp-validation-for="Sifre" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="SifreTekrar" class="control-label">Þifre (Tekrar)</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            </div>
+                            <input type="password" id="SifreTekrar" name="SifreTekrar" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            <input asp-for="Email" class="form-control" type="email" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="AdSoyad" class="control-label"></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                            </div>
+                            <input asp-for="AdSoyad" class="form-control" />
+                        </div>
+                        <span asp-validation-for="AdSoyad" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="RolId" class="control-label">Kullanýcý Rolü</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                            </div>
+                            <select asp-for="RolId" asp-items="roller" class="form-control"></select>
+                        </div>
+                        <span asp-validation-for="RolId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="AktifMi" /> @Html.DisplayNameFor(model => model.AktifMi)
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save mr-1"></i>Kaydet
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left mr-1"></i>Listeye Dön
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-header">
+                <i class="fas fa-info-circle mr-1"></i>Bilgilendirme
+            </div>
+            <div class="card-body">
+                <p>
+                    <strong>Kullanýcý Adý:</strong> Benzersiz olmalýdýr.
+                </p>
+                <p>
+                    <strong>Þifre:</strong> En az 6 karakter, bir büyük harf, bir küçük harf ve bir rakam içermelidir.
+                </p>
+                <p>
+                    <strong>E-posta:</strong> Geçerli bir e-posta adresi giriniz.
+                </p>
+                <p>
+                    <strong>Kullanýcý Rolü:</strong> Kullanýcýnýn sistemdeki yetkilerini belirler.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
